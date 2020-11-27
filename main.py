@@ -47,10 +47,7 @@ def dis_traps():
     for x in range(HEIGHT):
         lines[x+2] = "{}|".format(x) + TRAP[x] + "|{}".format(x)
     lines[HEIGHT+2] = " +" + "=" * WIDTH + "+ "
-    lines[HEIGHT+3] = '  '
-    for x in range(WIDTH):
-        lines[HEIGHT+3] += str(x)
-    lines[HEIGHT+3] += lines[HEIGHT+3] + '  '
+    lines[HEIGHT+3] = lines[0]
 
     for line in lines:
         print(" ".join(line))
@@ -67,10 +64,7 @@ def display_board():
     for x in range(HEIGHT):
         lines[x+2] = "{}|".format(x) + BOARD[x] + "|{}".format(x)
     lines[HEIGHT+2] = " +" + "=" * WIDTH + "+ "
-    lines[HEIGHT+3] = '  '
-    for x in range(WIDTH):
-        lines[HEIGHT+3] += str(x)
-    lines[HEIGHT+3] += lines[HEIGHT+3] + '  '
+    lines[HEIGHT+3] = lines[0]
 
     for line in lines:
         print(" ".join(line))
