@@ -1,11 +1,10 @@
 # Global constants
 import random
 
-WIDTH = 7
-HEIGHT = 7
+SIZE = 7
 BOARD = []
-TRAP = []
-TRAPN = 0
+TRAP_BOARD = []
+TRAP_NUM = 0
 
 
 def replace(s, i, ch):
@@ -14,68 +13,68 @@ def replace(s, i, ch):
 
 def create_board():
     global BOARD
-    BOARD = ['-' * WIDTH] * HEIGHT
-    BOARD[0] = replace(BOARD[0], random.randrange(WIDTH), 'G')
-    BOARD[1] = 'p' * WIDTH
-    r = random.sample(range(WIDTH), 4)
-    BOARD[HEIGHT - 1] = replace(BOARD[HEIGHT - 1], r[0], 'B')
-    BOARD[HEIGHT - 1] = replace(BOARD[HEIGHT - 1], r[1], 'B')
-    BOARD[HEIGHT - 1] = replace(BOARD[HEIGHT - 1], r[2], 'R')
-    BOARD[HEIGHT - 1] = replace(BOARD[HEIGHT - 1], r[3], 'R')
+    BOARD = ['-' * SIZE] * SIZE
+    BOARD[0] = replace(BOARD[0], random.randrange(SIZE), 'G')
+    BOARD[1] = 'p' * SIZE
+    r = random.sample(range(SIZE), 4)
+    BOARD[SIZE - 1] = replace(BOARD[SIZE - 1], r[0], 'B')
+    BOARD[SIZE - 1] = replace(BOARD[SIZE - 1], r[1], 'B')
+    BOARD[SIZE - 1] = replace(BOARD[SIZE - 1], r[2], 'R')
+    BOARD[SIZE - 1] = replace(BOARD[SIZE - 1], r[3], 'R')
 
 
 def set_traps():
-    global TRAPN
-    global TRAP
-    TRAP = [' ' * WIDTH] * HEIGHT
-    for j in range(2, HEIGHT-1):
-        for i in range(WIDTH):
+    global TRAP_NUM
+    global TRAP_BOARD
+    TRAP_BOARD = [' ' * SIZE] * SIZE
+    for j in range(2, SIZE-1):
+        for i in range(SIZE):
             if random.random() <= 0.2:
-                TRAP[j] = replace(TRAP[j], i, 'T')
-                TRAPN += TRAPN+1
+                TRAP_BOARD[j] = replace(TRAP_BOARD[j], i, 'T')
+                TRAP_NUM += 1
 
 
 def dis_traps():
-    global TRAPN
-    lines = ['']*(HEIGHT+4)
+    global TRAP_NUM
+    lines = ['']*(SIZE+4)
     lines[0] = '  '
-    for x in range(WIDTH):
+    for x in range(SIZE):
         lines[0] += str(x)
-        lines[HEIGHT + 3] += str(x)
+        lines[SIZE + 3] += str(x)
     lines[0] += '  '
-    lines[1] = " +" + "=" * WIDTH + "+ "
-    for x in range(HEIGHT):
-        lines[x+2] = "{}|".format(x) + TRAP[x] + "|{}".format(x)
-    lines[HEIGHT+2] = " +" + "=" * WIDTH + "+ "
-    lines[HEIGHT+3] = lines[0]
+    lines[1] = " +" + "=" * SIZE + "+ "
+    for x in range(SIZE):
+        lines[x+2] = "{}|".format(x) + TRAP_BOARD[x] + "|{}".format(x)
+    lines[SIZE+2] = " +" + "=" * SIZE + "+ "
+    lines[SIZE+3] = lines[0]
 
     for line in lines:
         print(" ".join(line))
 
 
 def display_board():
-    lines = ['']*(HEIGHT+4)
+    lines = ['']*(SIZE+4)
     lines[0] = '  '
-    for x in range(WIDTH):
+    for x in range(SIZE):
         lines[0] += str(x)
-        lines[HEIGHT + 3] += str(x)
+        lines[SIZE + 3] += str(x)
     lines[0] += '  '
-    lines[1] = " +" + "=" * WIDTH + "+ "
-    for x in range(HEIGHT):
+    lines[1] = " +" + "=" * SIZE + "+ "
+    for x in range(SIZE):
         lines[x+2] = "{}|".format(x) + BOARD[x] + "|{}".format(x)
-    lines[HEIGHT+2] = " +" + "=" * WIDTH + "+ "
-    lines[HEIGHT+3] = lines[0]
+    lines[SIZE+2] = " +" + "=" * SIZE + "+ "
+    lines[SIZE+3] = lines[0]
 
     for line in lines:
         print(" ".join(line))
 
 
 def validate_moves():
-    pass
+    return True
 
 
 def check_traps():
-    pass
+    return -1, -1
 
 
 def move_general():
@@ -87,16 +86,12 @@ def move_soldier():
 
 
 def main():
-    pass
-
-
-def printboard():
     create_board()
     display_board()
     set_traps()
     dis_traps()
-    print('This board has {} hidden traps.'.format(TRAPN))
+    print('This board has {} hidden traps.'.format(TRAP_NUM))
 
 
 if __name__ == '__main__':
-    printboard()
+    main()
