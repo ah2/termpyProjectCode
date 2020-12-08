@@ -57,12 +57,11 @@ def display_board(board):
         lines[0] += str(x)
         lines[SIZE + 3] += str(x)
 
-    lines[0] += '  '
-    lines[1] = " +" + "=" * SIZE + "+ "
-
     for x in range(SIZE):
         lines[x+2] = "{}|".format(x) + board[x] + "|{}".format(x)
 
+    lines[0] += '  '
+    lines[1] = " +" + "=" * SIZE + "+ "
     lines[SIZE+2] = " +" + "=" * SIZE + "+ "
     lines[SIZE+3] = lines[0]
 
