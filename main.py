@@ -69,8 +69,23 @@ def display_board(board):
         print(" ".join(line))
 
 
-def validate_moves(r, c, nr, nc, board):
-    return True
+def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
+
+    # Check if the soldier present at current location is 'B'.
+    if board[current_row][current_coloumn] == ' B ':
+        if new_row == current_row + 1 and new_coloumn == current_coloumn + 1:
+            return True
+        elif new_row == current_row - 1 and new_coloumn == current_coloumn - 1:
+            return True
+        elif new_row == current_row - 1 and new_coloumn == current_coloumn + 1:
+            return True
+        elif new_row == current_row + 1 and new_coloumn == current_coloumn - 1:
+            return True
+
+    # Check if the soldier present at current location is 'R'.
+    elif board[current_row][current_coloumn] == ' R ':
+        if new_row == current_row or new_coloumn == current_coloumn:
+            return True
 
 
 def check_traps(r, c, nr, nc, tBoard):
