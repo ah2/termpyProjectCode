@@ -23,7 +23,7 @@ def create_board():
 def set_traps():
     trap_num = 0
     trap_board = [' ' * SIZE] * SIZE
-    for j in range(2, SIZE-1):
+    for j in range(2, SIZE - 1):
         for i in range(SIZE):
             if random.random() <= 0.2:
                 trap_board[j] = replace(trap_board[j], i, 'T')
@@ -33,7 +33,7 @@ def set_traps():
 
 
 def dis_traps(trap_board):
-    lines = ['']*(SIZE+4)
+    lines = [''] * (SIZE + 4)
     lines[0] = '  '
     for x in range(SIZE):
         lines[0] += str(x)
@@ -41,16 +41,16 @@ def dis_traps(trap_board):
     lines[0] += '  '
     lines[1] = " +" + "=" * SIZE + "+ "
     for x in range(SIZE):
-        lines[x+2] = "{}|".format(x) + trap_board[x] + "|{}".format(x)
-    lines[SIZE+2] = " +" + "=" * SIZE + "+ "
-    lines[SIZE+3] = lines[0]
+        lines[x + 2] = "{}|".format(x) + trap_board[x] + "|{}".format(x)
+    lines[SIZE + 2] = " +" + "=" * SIZE + "+ "
+    lines[SIZE + 3] = lines[0]
 
     for line in lines:
         print(" ".join(line))
 
 
 def display_board(board):
-    lines = ['']*(SIZE+4)
+    lines = [''] * (SIZE + 4)
     lines[0] = '  '
 
     for x in range(SIZE):
@@ -58,12 +58,12 @@ def display_board(board):
         lines[SIZE + 3] += str(x)
 
     for x in range(SIZE):
-        lines[x+2] = "{}|".format(x) + board[x] + "|{}".format(x)
+        lines[x + 2] = "{}|".format(x) + board[x] + "|{}".format(x)
 
     lines[0] += '  '
     lines[1] = " +" + "=" * SIZE + "+ "
-    lines[SIZE+2] = " +" + "=" * SIZE + "+ "
-    lines[SIZE+3] = lines[0]
+    lines[SIZE + 2] = " +" + "=" * SIZE + "+ "
+    lines[SIZE + 3] = lines[0]
 
     for line in lines:
         print(" ".join(line))
@@ -84,15 +84,32 @@ def move_general(loc, board):
         board[0] = replace(board[0], loc, 'G')
 
 
-def move_soldier():
-    pass
+def move_soldier(x, y, x2, y2, board, trap_board):
+    tmp = ''
+    if validate_moves(x, y, x2, y2, board):
+        if check_traps(x, y, x2, y2, trap_board):
+            print(f'There was a trap at [{0},{0}]. Your soldier dies!')
+        else:
+            tmp = board[y][x]
+            board[y] = replace(board[y], x, '-')
+            board[y2] = replace(board[y2], x2, tmp)
+    else:
+        print(f'Invalid move for {tmp}')
 
 
 def main():
     board = create_board()
     trap_board = set_traps()
     display_board(board)
-    dis_traps(trap_board)
+    # dis_traps(trap_board)
+
+    while (True):
+        print('To move your soldier enter it\'s current position <row,col>: ', end='')
+        x1, y1 = map(int, input().split())
+        print('Enter the new position <row,col>: ', end='')
+        x2, y2 = map(int, input().split())
+        move_soldier(x1, y1, x2, y2, board, trap_board)
+        display_board(board)
 
 
 if __name__ == '__main__':

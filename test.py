@@ -53,5 +53,6 @@ def create_board():
 
     print(f"\n\nRandom Number = {random_number}")
 
+
 if __name__ == '__main__':
     create_board()
