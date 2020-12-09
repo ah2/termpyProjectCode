@@ -72,7 +72,7 @@ def display_board(board):
 def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
 
     # Check if the soldier present at current location is 'B'.
-    if board[current_row][current_coloumn] == ' B ' and (7 <= new_row >= 0) and (7 <= new_coloumn >= 0):
+    if board[current_row][current_coloumn] == ' B ' and (SIZE <= new_row >= 0) and (SIZE <= new_coloumn >= 0):
         if new_row == current_row + 1 and new_coloumn == current_coloumn + 1:
             if board[new_row][new_coloumn] == ' B ' or ' R ':
                 return False
@@ -89,6 +89,14 @@ def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
             else
                 return True
         elif new_row == current_row + 1 and new_coloumn == current_coloumn - 1:
+            if board[new_row][new_coloumn] == ' B ' or ' R ':
+                return False
+            else
+                return True
+
+    # Check if the soldier present at current location is 'R'.
+    elif board[current_row][current_coloumn] == ' R ' and (SIZE <= new_row >= 0) and (SIZE <= new_coloumn >= 0):
+        if new_row == current_row or new_coloumn == current_coloumn:
             if board[new_row][new_coloumn] == ' B ' or ' R ':
                 return False
             else
