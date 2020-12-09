@@ -93,7 +93,7 @@ def validate_moves(c_row, c_col, n_row, n_col, board):
 
 
 def check_traps(c_row, c_col, n_row, n_col, trap_board):
-    return False
+    return False, 0, 0
 
 
 def move_general(n_col, board):
@@ -106,9 +106,11 @@ def move_general(n_col, board):
 def move_soldier(row, col, n_row, n_col, board, trap_board):
     tmp = board[row][col]
     if validate_moves(row, col, n_row, n_col, board):
-        trap = check_traps(row, col, n_row, n_col, trap_board)
+        trap, t_col, t_row = check_traps(row, col, n_row, n_col, trap_board)
         if trap:
-            print(f'There was a trap at [{trap[0]},{trap[1]}]. Your soldier dies!')
+            board[row] = replace(board[row], col, '-')
+            board[n_row] = replace(board[n_row], n_col, 'T')
+            print(f'There was a trap at [{t_col},{t_row}]. Your soldier dies!')
         else:
             board[row] = replace(board[row], col, '-')
             board[n_row] = replace(board[n_row], n_col, tmp)
@@ -128,9 +130,9 @@ def main():
     while True:
         try:
             print('To move your soldier enter it\'s current position <row,col>: ', end='')
-            y1, x1 = map(int, input().split())
+            y1, x1 = map(int, input().split(','))
             print('Enter the new position <row,col>: ', end='')
-            y2, x2 = map(int, input().split())
+            y2, x2 = map(int, input().split(','))
 
             move_soldier(y1, x1, y2, x2, board, trap_board)
             display_board(board)
