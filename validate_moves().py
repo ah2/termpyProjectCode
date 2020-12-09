@@ -1,3 +1,6 @@
+SIZE = 7
+
+
 def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
 
     # Check if the soldier present at current location is 'B' and the new location is not outside the board.
@@ -8,7 +11,7 @@ def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
             # Check if there is a soldier at the new location.
             if board[new_row][new_coloumn] == 'B' or 'R':
                 return False
-            else
+            else:
                 return True
 
         # Moving diagonally left-up.
@@ -16,7 +19,7 @@ def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
             # Check if there is a soldier at the new location.
             if board[new_row][new_coloumn] == 'B' or 'R':
                 return False
-            else
+            else:
                 return True
 
         # Moving diagonally right-up.
@@ -24,7 +27,7 @@ def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
             # Check if there is a soldier at the new location.
             if board[new_row][new_coloumn] == 'B' or 'R':
                 return False
-            else
+            else:
                 return True
 
         # Moving diagonally left-down.
@@ -32,7 +35,7 @@ def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
             # Check if there is a soldier at the new location.
             if board[new_row][new_coloumn] == 'B' or 'R':
                 return False
-            else
+            else:
                 return True
 
     # Check if the soldier present at current location is 'R' and the new location is not outside the board.
@@ -43,5 +46,5 @@ def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
             # Check if there is a soldier at the new location.
             if board[new_row][new_coloumn] == 'B' or 'R':
                 return False
-            else
+            else:
                 return True
