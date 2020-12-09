@@ -51,10 +51,7 @@ def create_board():
     for num2 in [0, 1, 2, 3, 4, 5, 6]:
         print(" {0} ".format(num2), end="")
 
-
     print(f"\n\nRandom Number = {random_number}")
 
-
-
-
-create_board()
+if __name__ == '__main__':
+    create_board()

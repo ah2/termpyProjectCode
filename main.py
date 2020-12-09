@@ -81,7 +81,7 @@ def move_general(loc, board):
     for x in range(SIZE):
         if board[0][x] == 'G':
             board[0] = replace(board[0], x, ' ')
-            board[0] = replace(board[0], loc, 'G')
+        board[0] = replace(board[0], loc, 'G')
 
 
 def move_soldier():
