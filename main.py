@@ -72,20 +72,27 @@ def display_board(board):
 def validate_moves(current_row, current_coloumn, new_row, new_coloumn, board):
 
     # Check if the soldier present at current location is 'B'.
-    if board[current_row][current_coloumn] == ' B ':
+    if board[current_row][current_coloumn] == ' B ' and (7 <= new_row >= 0) and (7 <= new_coloumn >= 0):
         if new_row == current_row + 1 and new_coloumn == current_coloumn + 1:
-            return True
+            if board[new_row][new_coloumn] == ' B ' or ' R ':
+                return False
+            else
+                return True
         elif new_row == current_row - 1 and new_coloumn == current_coloumn - 1:
-            return True
+            if board[new_row][new_coloumn] == ' B ' or ' R ':
+                return False
+            else
+                return True
         elif new_row == current_row - 1 and new_coloumn == current_coloumn + 1:
-            return True
+            if board[new_row][new_coloumn] == ' B ' or ' R ':
+                return False
+            else
+                return True
         elif new_row == current_row + 1 and new_coloumn == current_coloumn - 1:
-            return True
-
-    # Check if the soldier present at current location is 'R'.
-    elif board[current_row][current_coloumn] == ' R ':
-        if new_row == current_row or new_coloumn == current_coloumn:
-            return True
+            if board[new_row][new_coloumn] == ' B ' or ' R ':
+                return False
+            else
+                return True
 
 
 def check_traps(r, c, nr, nc, tBoard):
