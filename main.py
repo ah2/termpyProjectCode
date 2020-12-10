@@ -8,6 +8,14 @@ def replace(string, i, ch):
     return string[:i] + ch + string[i + 1:]
 
 
+def compare(i, j):
+    if i < j:
+        return 1
+    if i > j:
+        return -1
+    return 0
+
+
 def create_board():
     board = ['-' * SIZE] * SIZE
     board[0] = replace(board[0], random.randrange(SIZE), 'G')
@@ -86,36 +94,67 @@ def validate_moves(c_row, c_col, n_row, n_col, board):
 
     # check if move is valid for Bishop:
     if board[c_row][c_col] == 'B':
-        if abs(c_row - c_col) == abs(n_row - n_col) or c_row + c_col == c_row + n_col:
+        if abs(c_row - c_col) == abs(n_row - n_col) \
+                or c_row + c_col == c_row + n_col:
             return True
 
     return False
 
 
 def check_traps(c_row, c_col, n_row, n_col, trap_board):
-    return False, 0, 0
+    # check if we reached destination:
+    if c_row == n_row and c_col == n_col:
+        return False, c_row, c_col
+
+    # check if there is a trap in current location:
+    if trap_board[c_row][c_col] == 'T':
+        return True, c_row, c_col
+
+    # get delta movement in X-axis
+    x = compare(c_col, n_col)
+
+    # get delta movement in Y-axis
+    y = compare(c_row, n_row)
+
+    # recursively call with one unit of movement in X, Y axis
+    return check_traps(c_row + y, c_col + x, n_row, n_col, trap_board)
 
 
-def move_general(n_col, board):
+def move_general(board):
+    # find and remove G from the  first row
     for col in range(SIZE):
         if board[0][col] == 'G':
-            board[0] = replace(board[0], col, ' ')
-        board[0] = replace(board[0], n_col, 'G')
+            board[0] = replace(board[0], col, '-')
+
+    # get random values until we find an empty location
+    while True:
+        n_col = random.randrange(SIZE)
+        if board[0][n_col] == '-':
+            board[0] = replace(board[0], n_col, 'G')
+            break
 
 
-def move_soldier(row, col, n_row, n_col, board, trap_board):
-    score_dict = {'-': 0, 'P': 1, 'G': 1000}
-    tmp = board[row][col]
-    if validate_moves(row, col, n_row, n_col, board):
-        trap, t_col, t_row = check_traps(row, col, n_row, n_col, trap_board)
+def move_soldier(c_row, c_col, n_row, n_col, board, trap_board):
+
+    score_dict = {'-': 0, 'P': 2, 'G': 1000}
+    tmp = board[c_row][c_col]
+
+    # check if move is valid
+    if validate_moves(c_row, c_col, n_row, n_col, board):
+        # check recursively for traps
+        trap, t_col, t_row = check_traps(c_row, c_col, n_row, n_col, trap_board)
+
+        # updating the board with a T and returning score
         if trap:
-            board[row] = replace(board[row], col, '-')
+            board[c_row] = replace(board[c_row], c_col, '-')
             board[t_row] = replace(board[t_row], t_col, 'T')
             print(f'There was a trap at [{t_col},{t_row}]. Your soldier dies!')
             return -1
+
+        # no trap found, check if soldier captured
         else:
             e_sol = board[n_row][n_col]
-            board[row] = replace(board[row], col, '-')
+            board[c_row] = replace(board[c_row], c_col, '-')
             board[n_row] = replace(board[n_row], n_col, tmp)
             return score_dict[e_sol]
 
@@ -126,15 +165,21 @@ def move_soldier(row, col, n_row, n_col, board, trap_board):
 
 def main():
     print('Game starts now >>')
+
+    # initialize board, traps, number of soldiers and score
     board = create_board()
     trap_board = set_traps()
     score = 0
     num_sol = 4
 
-    display_board(board)
-    # dis_traps(trap_board)
+    # display_board(board)
+    dis_traps(trap_board)
 
     while num_sol > 0 and score < 1000:
+        # display board and score
+        display_board(board)
+        print(f'Your score: {score}')
+
         try:
             # get user input
             print('To move your soldier enter it\'s current position <row,col>: ', end='')
@@ -148,18 +193,22 @@ def main():
             if tmp_score == -1:
                 num_sol -= 1
 
-            if num_sol <1:
-                print('you loose!')
+            # moving general for next run
+            move_general(board)
 
-            if score >= 1000 :
-                print('you Win!')
-
-            # display board and score
-            display_board(board)
-            print(f'Your score: {score}')
-
-        except (ValueError, IndexError):
+        except ValueError:
             print('Invalid input')
+
+    # game finish
+    # check if lost
+    if num_sol < 1:
+        print('you lose!')
+        return
+
+    # check if won
+    if score >= 1000:
+        print(f'you Win! Final score: {score}')
+        return
 
 
 if __name__ == '__main__':
