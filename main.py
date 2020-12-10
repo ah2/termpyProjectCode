@@ -1,6 +1,8 @@
-# Global constants
-import random
+# Ahmed Mohamed Vall - U14210122
+# Syed Ameenuddin - U17101911
 
+import random
+# Global constants
 SIZE = 7
 
 
@@ -57,6 +59,14 @@ def dis_traps(trap_board):
         print(" ".join(line))
 
 
+def display_finish_board(board, trap_board):
+    for x in range(SIZE):
+        for y in range(SIZE):
+            if trap_board[y][x] == 'T':
+                board[y] = replace(board[y], x, 'T')
+    display_board(board)
+
+
 def display_board(board):
     lines = [''] * (SIZE + 4)
     lines[0] = '  '
@@ -87,6 +97,17 @@ def validate_moves(c_row, c_col, n_row, n_col, board):
     if board[n_row][n_col] in ('R', 'B'):
         return False
 
+    # check path is blocked
+    # get delta movements
+    x = compare(c_col, n_col)
+    y = compare(c_row, n_row)
+    tmp_row, tmp_col = c_row + y, c_col + x
+    while tmp_row != n_row and tmp_row != n_col:
+        if board[tmp_row][tmp_col] != '-':
+            return False
+        tmp_row += y
+        tmp_col += x
+
     # check if move is valid for Rock:
     if board[c_row][c_col] == 'R':
         if c_row == n_row or c_col == n_col:
@@ -94,8 +115,7 @@ def validate_moves(c_row, c_col, n_row, n_col, board):
 
     # check if move is valid for Bishop:
     if board[c_row][c_col] == 'B':
-        if abs(c_row - c_col) == abs(n_row - n_col) \
-                or c_row + c_col == c_row + n_col:
+        if abs(c_row-c_col) == abs(n_row-n_col) or c_row + c_col == n_row + n_col:
             return True
 
     return False
@@ -136,7 +156,7 @@ def move_general(board):
 
 def move_soldier(c_row, c_col, n_row, n_col, board, trap_board):
 
-    score_dict = {'-': 0, 'P': 2, 'G': 1000}
+    score_dict = {'-': 0, 'P': 2, 'G': 1010}
     tmp = board[c_row][c_col]
 
     # check if move is valid
@@ -159,7 +179,10 @@ def move_soldier(c_row, c_col, n_row, n_col, board, trap_board):
             return score_dict[e_sol]
 
     else:
-        print(f'Invalid move for {tmp}')
+        if tmp in ('B', 'R'):
+            print(f'Invalid move for {tmp}')
+        else:
+            print(f'Invalid move')
         return 0
 
 
@@ -184,6 +207,9 @@ def main():
             # get user input
             print('To move your soldier enter it\'s current position <row,col>: ', end='')
             y1, x1 = map(int, input().split(','))
+            if board[y1][x1] not in ('B', 'R'):
+                print(f'no soldier found at<{y1},{x1}>')
+                continue
             print('Enter the new position <row,col>: ', end='')
             y2, x2 = map(int, input().split(','))
 
@@ -207,7 +233,8 @@ def main():
 
     # check if won
     if score >= 1000:
-        print(f'you Win! Final score: {score}')
+        print(f'you Win! Final score: {score-1000}')
+        display_finish_board(board, trap_board)
         return
 
 
