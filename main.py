@@ -1,5 +1,5 @@
 # Ahmed Mohamed Vall - U14210122
-# Syed Ameenuddin - U17101911
+# Syed Ameen Uddin - U17101911
 
 import random
 # Global constants
@@ -42,7 +42,7 @@ def set_traps():
     return trap_board
 
 
-def dis_traps(trap_board):
+def display_traps(trap_board):
     lines = [''] * (SIZE + 4)
     lines[0] = '  '
     for x in range(SIZE):
@@ -93,20 +93,24 @@ def validate_moves(c_row, c_col, n_row, n_col, board):
         if x < 0 or x > SIZE:
             return False
 
-    # check if destination if occupied
-    if board[n_row][n_col] in ('R', 'B'):
+    # check if destination if occupied by player piece or revealed trap
+    if board[n_row][n_col] in ('R', 'B', 'T'):
         return False
 
-    # check path is blocked
-    # get delta movements
+    # get delta movement in X,Y axis
     x = compare(c_col, n_col)
     y = compare(c_row, n_row)
-    tmp_row, tmp_col = c_row + y, c_col + x
-    while tmp_row != n_row and tmp_row != n_col:
-        if board[tmp_row][tmp_col] != '-':
+
+    # check path to destination
+    tmpy = c_row
+    tmpx = c_col
+    tmpy += y
+    tmpx += x
+    while tmpy != n_row or tmpx != n_col:
+        if board[tmpy][tmpx] != '-':
             return False
-        tmp_row += y
-        tmp_col += x
+        tmpy += y
+        tmpx += x
 
     # check if move is valid for Rock:
     if board[c_row][c_col] == 'R':
@@ -162,13 +166,13 @@ def move_soldier(c_row, c_col, n_row, n_col, board, trap_board):
     # check if move is valid
     if validate_moves(c_row, c_col, n_row, n_col, board):
         # check recursively for traps
-        trap, t_col, t_row = check_traps(c_row, c_col, n_row, n_col, trap_board)
+        trap, t_row, t_col = check_traps(c_row, c_col, n_row, n_col, trap_board)
 
         # updating the board with a T and returning score
         if trap:
             board[c_row] = replace(board[c_row], c_col, '-')
             board[t_row] = replace(board[t_row], t_col, 'T')
-            print(f'There was a trap at [{t_col},{t_row}]. Your soldier dies!')
+            print(f'There was a trap at [{t_row},{t_col}]. Your soldier dies!')
             return -1
 
         # no trap found, check if soldier captured
@@ -196,7 +200,7 @@ def main():
     num_sol = 4
 
     # display_board(board)
-    dis_traps(trap_board)
+    # display_traps(trap_board)
 
     while num_sol > 0 and score < 1000:
         # display board and score
