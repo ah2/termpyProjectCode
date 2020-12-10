@@ -11,7 +11,7 @@ def replace(string, i, ch):
 def create_board():
     board = ['-' * SIZE] * SIZE
     board[0] = replace(board[0], random.randrange(SIZE), 'G')
-    board[1] = 'p' * SIZE
+    board[1] = 'P' * SIZE
     r = random.sample(range(SIZE), 4)
     board[SIZE - 1] = replace(board[SIZE - 1], r[0], 'B')
     board[SIZE - 1] = replace(board[SIZE - 1], r[1], 'B')
@@ -104,18 +104,24 @@ def move_general(n_col, board):
 
 
 def move_soldier(row, col, n_row, n_col, board, trap_board):
+    score_dict = {'-': 0, 'P': 1, 'G': 1000}
     tmp = board[row][col]
     if validate_moves(row, col, n_row, n_col, board):
         trap, t_col, t_row = check_traps(row, col, n_row, n_col, trap_board)
         if trap:
             board[row] = replace(board[row], col, '-')
-            board[n_row] = replace(board[n_row], n_col, 'T')
+            board[t_row] = replace(board[t_row], t_col, 'T')
             print(f'There was a trap at [{t_col},{t_row}]. Your soldier dies!')
+            return -1
         else:
+            e_sol = board[n_row][n_col]
             board[row] = replace(board[row], col, '-')
             board[n_row] = replace(board[n_row], n_col, tmp)
+            return score_dict[e_sol]
+
     else:
         print(f'Invalid move for {tmp}')
+        return 0
 
 
 def main():
@@ -123,18 +129,32 @@ def main():
     board = create_board()
     trap_board = set_traps()
     score = 0
+    num_sol = 4
 
     display_board(board)
     # dis_traps(trap_board)
 
-    while True:
+    while num_sol > 0 and score < 1000:
         try:
+            # get user input
             print('To move your soldier enter it\'s current position <row,col>: ', end='')
             y1, x1 = map(int, input().split(','))
             print('Enter the new position <row,col>: ', end='')
             y2, x2 = map(int, input().split(','))
 
-            move_soldier(y1, x1, y2, x2, board, trap_board)
+            # calc score and number of soldiers left:
+            tmp_score = move_soldier(y1, x1, y2, x2, board, trap_board)
+            score += tmp_score
+            if tmp_score == -1:
+                num_sol -= 1
+
+            if num_sol <1:
+                print('you loose!')
+
+            if score >= 1000 :
+                print('you Win!')
+
+            # display board and score
             display_board(board)
             print(f'Your score: {score}')
 
